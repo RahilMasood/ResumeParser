@@ -51,7 +51,8 @@ def analyze_resume(extracted_text):
     4. Specific skills they could develop to enhance their career prospects
     5. Industries that might be particularly interested in their profile
     
-    Be encouraging but realistic. Format your response in a clean, readable manner with clear sections.
+    Be encouraging but realistic. Format your response in a clean, readable manner with clear sections. 
+    Remember the text will displayed as showed so dont try to bold or italic or format it. Give plain text.
     """
     
     try:
@@ -66,7 +67,6 @@ def analyze_resume(extracted_text):
                 {"role": "user", "content": prompt}
             ]
         }
-        
         response = requests.post(API_URL, headers=headers, json=data)
         response.raise_for_status()
         result = response.json()
@@ -91,9 +91,10 @@ def generate_career_response(query):
         --- END RESUME TEXT ---
         
         Be extra harsh, use slangs, and don't hold back. Make it sound like a comedy roast.
+        Remember the text will displayed as showed so dont try to bold or italic or format it. Give plain text.
         """
     else:
-        prompt = f"""
+        prompt = f'''
         You are CareerPulse, a career advisor AI. The user is having a conversation with you about their career.
         
         Here is their resume for context:
@@ -104,7 +105,8 @@ def generate_career_response(query):
         Their question or comment is: "{query}"
         Provide helpful, personalized career advice based on their resume and current question.
         Be encouraging, specific, and actionable in your guidance.
-        """
+        Remember the text will displayed as showed so dont try to bold or italic or format it. Give plain text.
+        '''
     
     try:
         headers = {
