@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerPulse - Resume Analyzer & Career Advisor</title>
+    <style>
+        :root {
+            --primary-dark: #161a2b;
+            --secondary-dark: #1e2235;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 80px;
+            background-color: var(--secondary-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-icon {
+            width: 32px;
+            height: 32px;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: all 0.2s;
+        }
+        
+        .sidebar-icon:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+        
+        .sidebar-icon.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+        }
+        
+        .content {
+            flex: 1;
+            padding: 1rem 2rem;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+        
+        .logo-icon {
+            background-color: var(--accent-green);
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .connect-btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .roast-btn {
+            background-color: #ef4444; /* Red color for roast */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        
+        .upload-container {
+            background-color: var(--secondary-dark);
+            border-radius: 12px;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .upload-box {
+            background-color: rgba(30, 34, 53, 0.8);
+            border-radius: 12px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+        
+        .upload-icon {
+            color: var(--accent-green);
+            font-size: 48px;
+            margin-bottom: 1rem;
+        }
+        
+        .upload-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .upload-description {
+            color: var(--text-gray);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .formats {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-top: 1rem;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .drag-active {
+            border-color: var(--accent-green);
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            height: 70vh;
+            background-color: var(--secondary-dark);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+        
+        .user-message {
+            background-color: var(--accent-blue);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .bot-message {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background-color: rgba(30, 34, 53, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .message-input {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        
+        .send-btn {
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-green);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+            </svg>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                CareerPulse
+            </div>
+            <div class="buttons-container">
+                <button class="roast-btn" id="roastBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"></path>
+                    </svg>
+                    Roast My Resume
+                </button>
+                <button class="connect-btn" id="resetBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+
+                </button>
+            </div>
+        </div>
+        
+        <h1 class="page-title">Resume Analyzer & Career Advisor</h1>
+        
+        <div class="upload-container" id="uploadContainer">
+            <div class="upload-box" id="uploadBox">
+                <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                </div>
+                <h2 class="upload-title">Upload Your Resume</h2>
+                <p class="upload-description">Drag and drop your resume here, or click to select files</p>
+                <input type="file" id="fileInput" class="file-input" multiple accept=".pdf">
+                <p class="formats">Supported format: PDF</p>
+            </div>
+        </div>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    Hello! I've analyzed your resume and provided career suggestions above. Feel free to ask me any questions about your career path, job search, or skills development. I'm here to help!
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" class="message-input" id="messageInput" placeholder="Ask me about your career options...">
+                <button class="send-btn" id="sendButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loadingContainer">
+            <div class="spinner"></div>
+            <p>Analyzing your resume and career possibilities...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadBox = document.getElementById('uploadBox');
+            const fileInput = document.getElementById('fileInput');
+            const uploadContainer = document.getElementById('uploadContainer');
+            const chatContainer = document.getElementById('chatContainer');
+            const loadingContainer = document.getElementById('loadingContainer');
+            const chatMessages = document.getElementById('chatMessages');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const roastBtn = document.getElementById('roastBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // Handle roast button click
+            roastBtn.addEventListener('click', function() {
+                if (chatContainer.style.display === 'flex') {
+                    sendMessageToBackend("Roast my resume!");
+                } else {
+                    alert("Please upload your resume first!");
+                }
+            });
+            
+            // Handle reset button
+            resetBtn.addEventListener('click', function() {
+                resetChat();
+                uploadContainer.style.display = 'flex';
+                chatContainer.style.display = 'none';
+            });
+            
+            // Handle file upload via click
+            uploadBox.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Handle file selection
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    handleFiles(fileInput.files);
+                }
+            });
+            
+            // Handle drag and drop
+            uploadBox.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadBox.classList.add('drag-active');
+            });
+            
+            uploadBox.addEventListener('dragleave', function() {
+                uploadBox.classList.remove('drag-active');
+            });
+            
+            uploadBox.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadBox.classList.remove('drag-active');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // Handle send message
+            sendButton.addEventListener('click', function() {
+                const message = messageInput.value.trim();
+                if (message === '') return;
+                
+                sendMessageToBackend(message);
+            });
+            
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const message = messageInput.value.trim();
+                    if (message === '') return;
+                    
+                    sendMessageToBackend(message);
+                }
+            });
+            
+            function handleFiles(files) {
+                // Filter PDF files
+                const pdfFiles = Array.from(files).filter(file => file.type === 'application/pdf');
+                
+                if (pdfFiles.length === 0) {
+                    alert('Please upload a PDF resume');
+                    return;
+                }
+                
+                // Show loading
+                uploadContainer.style.display = 'none';
+                loadingContainer.style.display = 'block';
+                
+                const formData = new FormData();
+                for (let i = 0; i < pdfFiles.length; i++) {
+                    formData.append('files[]', pdfFiles[i]);
+                }
+                
+                // Send files to server
+                fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loading and show chat
+                    loadingContainer.style.display = 'none';
+                    chatContainer.style.display = 'flex';
+                    
+                    // Add response to chat
+                    addMessage(data.response, false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loadingContainer.style.display = 'none';
+                    uploadContainer.style.display = 'flex';
+                    alert('An error occurred while processing your resume. Please try again.');
+                });
+            }
+            
+            function sendMessageToBackend(message) {
+                // Add message to chat
+                addMessage(message, true);
+                messageInput.value = '';
+                
+                // Send message to server
+                fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Add response to chat
+                    addMessage(data.response, false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    addMessage('Sorry, an error occurred. Please try again.', false);
+                });
+            }
+            
+            function addMessage(text, isUser) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+                messageElement.textContent = text;
+                
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Reset chat functionality
+            function resetChat() {
+                chatMessages.innerHTML = '';
+                addMessage('Hello! Upload your resume to get started with personalized career advice.', false);
+                
+                fetch('/api/reset', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .catch(error => console.error('Error resetting chat:', error));
+            }
+        });
+    </script>
+</body>
+</html>
