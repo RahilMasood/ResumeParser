@@ -25,8 +25,8 @@ A simple and efficient resume parser web app built with **Flask**, created by **
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/<your-username>/resume_parser.git
-   cd resume_parser
+   git clone https://github.com/RahilMasood/ResumeParser.git
+   cd ResumeParser
 2. **Install dependencies**
     ```bash
     pip install -r requirements.txt
