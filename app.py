@@ -8,7 +8,7 @@ import re
 app = Flask(__name__)
 
 # OpenRouter configuration
-API_KEY = "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"
+API_KEY = "api-key-here"
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL_NAME = "google/gemini-2.0-flash-thinking-exp:free"
 
