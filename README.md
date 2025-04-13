@@ -1,8 +1,8 @@
-# 📝 Resume Parser
+# Resume Parser
 
-A simple and efficient resume parser web app built with **Flask**, created by **Rahil Masood** and **Rajarshi**. This tool extracts and displays relevant information from uploaded resumes to help recruiters or HR systems quickly analyze candidate details.
+A simple and efficient resume parser web app built with **Flask**, created by **Rahil Masood** and **Rajarshi**. This tool extracts and displays detailed information from uploaded resumes to help recruiters or HR systems quickly analyze candidate details.
 
-## 🚀 Features
+## Features
 
 - Upload resumes in common formats
 - Automatically extract:
@@ -12,17 +12,16 @@ A simple and efficient resume parser web app built with **Flask**, created by **
   - Skills
   - Education
   - Experience
-- 
 - Clean and responsive web interface
 - Easy to deploy on local or cloud environments
 
-## 🧠 Tech Stack
+## Tech Stack
 
 - **Backend:** Flask (Python)
 - **Frontend:** HTML (Jinja2 templating)
 - **Deployment:** Compatible with Render, Heroku, etc.
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 1. **Clone the repository**
    ```bash
@@ -38,8 +37,8 @@ A simple and efficient resume parser web app built with **Flask**, created by **
     python -m flask run
 4. **Visit Open your browser and go to: http://localhost:5000**
 
-## 📁 Project Structure
-    ```bash
+## Project Structure
+    
     resume_parser/
     │
     ├── app.py                 # Main Flask app
@@ -51,4 +50,4 @@ A simple and efficient resume parser web app built with **Flask**, created by **
 ## 🙌 Authors
 
 - [**Rahil Masood**](https://github.com/RahilMasood)
-- [**Rajarshi**](https://github.com/<RajarshiUsername>)
+- [**Rajarshi Datta**](https://github.com/rajarshidattapy)
